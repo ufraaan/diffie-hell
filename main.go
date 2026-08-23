@@ -73,4 +73,12 @@ func main() {
 	fmt.Println("encrypted :", ciphertext)
 
 
+	// decrypting it
+	decrypted, err := gcm.Open(nil, ciphertext[:gcm.NonceSize()], ciphertext[gcm.NonceSize():], nil)
+	if err !=nil {
+		panic(err)
+	}
+
+	fmt.Println("decrypted:", string(decrypted))
+
 }
