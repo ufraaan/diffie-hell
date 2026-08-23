@@ -41,7 +41,7 @@ func main() {
 
 	fmt.Println("alice shared secret: ", aliceSharedSecret)
 	fmt.Println("bob shared secret: ", bobSharedSecret)
-	if (aliceSharedSecret == bobSharedSecret) {
+	if (aliceSharedSecret.Cmp(bobSharedSecret) == 0) {
 		fmt.Println("secrets matched")
 	} else {
 		fmt.Println("error")
