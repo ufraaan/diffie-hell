@@ -62,4 +62,15 @@ func main() {
 		panic(err)
 	}
 
+
+	// now we can use it to encrypt a message
+	message := []byte("hello ufraan")
+
+	nonce := make([]byte, gcm.NonceSize())
+	rand.Read(nonce)
+
+	ciphertext := gcm.Seal(nonce, nonce, message, nil)
+	fmt.Println("encrypted :", ciphertext)
+
+
 }
