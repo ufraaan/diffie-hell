@@ -21,8 +21,6 @@ func main() {
 	alicePublicKey.Exp(g, alicePvtKey, p)
 
 	fmt.Println("alice public key:", alicePublicKey)
-	
-
 
 	// generate bob's private key as int64, then convert to big.Int
 	bobPvtKeyInt := rand.Int64()
@@ -36,5 +34,17 @@ func main() {
 
 	fmt.Println("bob public key:", bobPublicKey)
 
+	// now we can exchange the public keys and calculate the shared secret
+	aliceSharedSecret := new(big.Int).Exp(bobPublicKey, alicePvtKey, p)
+	bobSharedSecret := new(big.Int).Exp(alicePublicKey, bobPvtKey, p)
+	// both have to be the same
+
+	fmt.Println("alice shared secret: ", aliceSharedSecret)
+	fmt.Println("bob shared secret: ", bobSharedSecret)
+	if (aliceSharedSecret == bobSharedSecret) {
+		fmt.Println("secrets matched")
+	} else {
+		fmt.Println("error")
+	}
 
 }
