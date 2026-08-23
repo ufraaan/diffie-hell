@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"math/big"
-	"math/rand/v2"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/sha256"
+	"crypto/rand"
 )
 
 func main() {
@@ -11,8 +14,7 @@ func main() {
 	p := big.NewInt(352)
 
 	//generate alice's private key as an int64, then convert to big.Int
-	alicePvtKeyInt := rand.Int64()
-	alicePvtKey := big.NewInt(alicePvtKeyInt)
+	alicePvtKey, _ := rand.Int(rand.Reader, p)
 	fmt.Println("alice private key:", alicePvtKey)
 
 	alicePublicKey := new(big.Int)
@@ -23,8 +25,7 @@ func main() {
 	fmt.Println("alice public key:", alicePublicKey)
 
 	// generate bob's private key as int64, then convert to big.Int
-	bobPvtKeyInt := rand.Int64()
-	bobPvtKey := big.NewInt(bobPvtKeyInt)
+	bobPvtKey, _ := rand.Int(rand.Reader, p)
 	fmt.Println("bob private key: ", bobPvtKey)
 
 	bobPublicKey := new(big.Int)
@@ -45,6 +46,20 @@ func main() {
 		fmt.Println("secrets matched")
 	} else {
 		fmt.Println("error")
+	}
+
+
+
+	// deriving 32byte aes256 key from the shared secret
+	key := sha256.Sum256(aliceSharedSecret.Bytes())
+
+	block, err := aes.NewCipher(key[:])
+	if err!= nil {
+		panic(err)
+	}
+	gcm, err := cipher.NewGCM(block) // returns the given 128-bit, block cipher wrapped in Galois Counter Mode with the standard nonce length
+	if err!= nil {
+		panic(err)
 	}
 
 }
